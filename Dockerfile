@@ -1,13 +1,15 @@
-##artifact build stage
-FROM maven AS buildstage
-RUN mkdir /opt/mindcircuit13
+# Stage 1: Build artifact with Maven
+FROM maven:3.9.3-eclipse-temurin-17 AS build-stage
+
 WORKDIR /opt/mindcircuit13
 COPY . .
-RUN mvn clean install    ## artifact -- .war
+RUN mvn clean package -DskipTests
 
-### tomcat deploy stage
-FROM tomcat
-WORKDIR webapps
-COPY --from=buildstage /opt/mindcircuit13/target/*.war .
+# Stage 2: Deploy artifact to Tomcat
+FROM tomcat:10.1.15-jdk17
+
+WORKDIR /usr/local/tomcat/webapps
+COPY --from=build-stage /opt/mindcircuit13/target/*.war .
 RUN rm -rf ROOT && mv *.war ROOT.war
+
 EXPOSE 8080
