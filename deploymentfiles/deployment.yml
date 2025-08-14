@@ -1,25 +1,21 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mc-app
+  name: mindcircuit13
   labels:
-    app: mc-app
+    app: mindcircuit13
 spec:
-  replicas: 4
+  replicas: 2
   selector:
     matchLabels:
-      app: mc-app
+      app: mindcircuit13
   template:
     metadata:
       labels:
-        app: mc-app
+        app: mindcircuit13
     spec:
       containers:
-      - name: mc-app
-        image: devopshubg333/batch13:5
+      - name: mindcircuit13
+        image: chida511/mindcircuit13:${BUILD_NUMBER}
         ports:
         - containerPort: 8080
-
-  
-
